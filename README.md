@@ -23,7 +23,8 @@ API REST construida con **Django** y **Django REST Framework (DRF)**. Las prueba
 | Python 3.12+ | Lenguaje |
 | Django | Framework web |
 | Django REST Framework | API REST |
-| SQLite | Base de datos (por defecto) |
+| MariaDB | Base de datos |
+| mysqlclient | Conector Django ↔ MariaDB |
 | Bruno | Cliente para probar la API |
 
 ---
@@ -91,10 +92,16 @@ source venv/bin/activate
 ### 3. Instalar dependencias
 
 ```bash
-pip install django djangorestframework
+pip install django djangorestframework mysqlclient
 ```
 
-### 4. Verificar `settings.py`
+### 4. Crear la base de datos en MariaDB
+
+```sql
+CREATE DATABASE u2_proyecto1 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 5. Configurar `settings.py`
 
 ```python
 INSTALLED_APPS = [
@@ -102,9 +109,25 @@ INSTALLED_APPS = [
     'rest_framework',
     'pedidos_app',
 ]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'u2_proyecto1',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
+    }
+}
 ```
 
-### 5. Migrar y ejecutar
+> Ajustar `USER` y `PASSWORD` según la instalación local de MariaDB.
+
+### 6. Migrar y ejecutar
 
 ```bash
 python manage.py makemigrations
